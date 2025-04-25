@@ -8,6 +8,10 @@
     ```bash
     yarn install
     ```
+3. **Build the dev launcher**
+    ```bash
+    yarn build:dev-launcher
+    ```
 
 ## Development Workflow
 
