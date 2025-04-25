@@ -36,3 +36,11 @@ yarn-error.*
 *.tsbuildinfo
 
 app-example
+
+ios/
+android/
+build/
+
+packages/expo-dev-launcher/ios/
+packages/expo-dev-launcher/android/
+packages/expo-dev-launcher/bundle/

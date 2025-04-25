@@ -1,50 +1,39 @@
-# Welcome to your Expo app 👋
+# RORK Client Installation and Development Guide
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## Installation
 
-## Get started
+1.  **Clone the repository:**
+    ```bash
+    git clone <repository-url>
+    cd rork-client
+    ```
 
-1. Install dependencies
+2.  **Install dependencies:**
+    ```bash
+    yarn install
+    ```
 
-   ```bash
-   npm install
-   ```
+## Development Workflow
 
-2. Start the app
+### Working with `packages/expo-dev-launcher`
 
-   ```bash
-    npx expo start
-   ```
+If you make changes within the `packages/expo-dev-launcher` directory, you need to rebuild the development launcher package.
 
-In the output, you'll find options to open the app in a
+1.  **Rebuild the dev launcher:**
+    Run the following command from the root directory:
+    ```bash
+    yarn build:dev-launcher
+    ```
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+2.  **Rebuild the application:**
+    After rebuilding the dev launcher package, you need to rebuild the native application for your target platform (iOS/Android). This process will incorporate the changes into the development client installed on your simulator or device.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### Building for iOS Simulator (Local Development)
 
-## Get a fresh project
+To build the application specifically for the iOS simulator:
 
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+1.  **Run the build command:**
+    ```bash
+    yarn build:ios-local
+    ```
+    This command will build the app and automatically install it onto your running iOS simulator.
