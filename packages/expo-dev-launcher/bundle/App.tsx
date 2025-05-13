@@ -9,6 +9,7 @@ import { AppProviders } from './providers/AppProviders';
 import { HomeScreen } from './screens/HomeScreen';
 import { CircleUserRound, House } from 'lucide-react-native';
 import { LoginScreen } from './screens/LoginScreen';
+import { ProfileScreen } from './screens/ProfileScreen';
 
 LogBox.ignoreLogs(['_NativeDevLoadingView.default.']);
 
@@ -84,7 +85,7 @@ const Main = () => {
       />
       <Tab.Screen
         name="Profile"
-        component={HomeScreen}
+        component={ProfileScreen}
         options={{
           headerShown: false,
           tabBarShowLabel: false,

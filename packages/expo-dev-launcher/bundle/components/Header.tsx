@@ -3,15 +3,25 @@ import { View, Text, TextInput, StyleSheet, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Search } from 'lucide-react-native';
 
-export function HomeHeader() {
+type HeaderProps = {
+  enableSearch?: boolean;
+  title?: string;
+};
+
+export function Header({
+  enableSearch = false,
+  title = 'My Projects',
+}: HeaderProps) {
   const insets = useSafeAreaInsets();
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
-      <Text style={styles.title}>My Projects</Text>
-      <View style={styles.searchContainer}>
-        <Search size={18} color="#8E8E93" />
-        <TextInput style={styles.searchInput} placeholder="Search" />
-      </View>
+      <Text style={styles.title}>{title}</Text>
+      {enableSearch && (
+        <View style={styles.searchContainer}>
+          <Search size={18} color="#8E8E93" />
+          <TextInput style={styles.searchInput} placeholder="Search" />
+        </View>
+      )}
     </View>
   );
 }

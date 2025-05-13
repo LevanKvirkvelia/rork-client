@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
-import { HomeHeader } from '../components/HomeHeader';
+import { Header } from '../components/Header';
 import { HomePlaceHolder } from '../components/HomePlaceHolder';
 import { Button } from '../components/Button';
 import { View, StyleSheet, Alert } from 'react-native';
@@ -13,7 +13,7 @@ export function HomeScreen() {
     useNavigation<StackNavigationProp<StackNavigatorParamList, 'Main'>>();
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      header: () => <HomeHeader />,
+      header: () => <Header enableSearch={true} title="My Projects" />,
       headerShown: true,
     });
   }, [navigation]);
