@@ -1,20 +1,18 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Platform,
-} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Apple, Chrome, X } from 'lucide-react-native';
+import { X } from 'lucide-react-native';
 import { Button } from '../components/Button';
 import { useNavigation } from '@react-navigation/native';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { StackNavigatorParamList } from '../App';
+import { signInWithGoogle } from '../utils/auth';
 
 export function LoginScreen() {
   const insets = useSafeAreaInsets();
-  const navigation = useNavigation();
+  const navigation =
+    useNavigation<StackNavigationProp<StackNavigatorParamList, 'Main'>>();
 
   return (
     <View style={[styles.container, { paddingTop: insets.top + 60 }]}>
@@ -41,6 +39,7 @@ export function LoginScreen() {
           title="Continue with Google"
           icon={<AntDesign name="google" size={20} />}
           variant="outlined"
+          onPress={() => signInWithGoogle(navigation)}
         />
       </View>
 
