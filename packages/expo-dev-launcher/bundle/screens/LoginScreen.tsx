@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { StackNavigatorParamList } from '../App';
-import { signInWithGoogle } from '../utils/auth';
+import { signInWithApple, signInWithGoogle } from '../utils/auth';
 
 export function LoginScreen() {
   const insets = useSafeAreaInsets();
@@ -34,6 +34,7 @@ export function LoginScreen() {
         <Button
           title="Continue with Apple"
           icon={<AntDesign name="apple1" size={20} color={'white'} />}
+          onPress={() => signInWithApple(navigation)}
         />
         <Button
           title="Continue with Google"

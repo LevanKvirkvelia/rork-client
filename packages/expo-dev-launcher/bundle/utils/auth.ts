@@ -1,7 +1,8 @@
 import { statusCodes } from '@react-native-google-signin/google-signin';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import * as AppleAuthentication from 'expo-apple-authentication';
 import { supabase } from './supabase';
-import { Alert } from 'react-native';
+import { Alert, Platform } from 'react-native';
 import { StackNavigatorParamList } from '../App';
 import { StackNavigationProp } from '@react-navigation/stack';
 
@@ -42,6 +43,46 @@ export const signInWithGoogle = async (
       );
     } else {
       Alert.alert('Error', 'An unknown error occurred during Google Sign-In.');
+    }
+  }
+};
+
+export const signInWithApple = async (
+  navigation: StackNavigationProp<StackNavigatorParamList, 'Main'>
+) => {
+  if (Platform.OS !== 'ios') {
+    Alert.alert('Error', 'Apple Sign-In is only available on iOS devices.');
+    return;
+  }
+
+  try {
+    const credential = await AppleAuthentication.signInAsync({
+      requestedScopes: [
+        AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+        AppleAuthentication.AppleAuthenticationScope.EMAIL,
+      ],
+    });
+
+    if (credential.identityToken) {
+      const { data, error } = await supabase.auth.signInWithIdToken({
+        provider: 'apple',
+        token: credential.identityToken,
+      });
+
+      if (error) {
+        Alert.alert('Error', error.message);
+      } else {
+        navigation.navigate('Main');
+      }
+    } else {
+      throw new Error('No identityToken present!');
+    }
+  } catch (error: any) {
+    if (error.code === 'ERR_REQUEST_CANCELED') {
+      Alert.alert('Cancelled', 'Apple Sign-In was cancelled.');
+    } else {
+      console.error(error);
+      Alert.alert('Error', 'An unknown error occurred during Apple Sign-In.');
     }
   }
 };
