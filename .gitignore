@@ -36,6 +36,7 @@ yarn-error.*
 *.tsbuildinfo
 
 /build/
-packages/expo-dev-launcher/ios/
 packages/expo-dev-launcher/android/
-/packages/expo-dev-launcher/ios
+packages/expo-dev-launcher/ios
+/android/
+/ios/
