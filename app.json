@@ -10,7 +10,7 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.upo.rork-client",
+      "bundleIdentifier": "com.rork.app",
       "config": {
         "usesNonExemptEncryption": false
       },
@@ -21,7 +21,7 @@
         "foregroundImage": "./assets/app-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.upo.rorkclient"
+      "package": "com.rork.app"
     },
     "web": {
       "bundler": "metro",
@@ -50,7 +50,7 @@
       [
         "@react-native-google-signin/google-signin",
         {
-          "iosUrlScheme": "com.googleusercontent.apps._some_id_here_"
+          "iosUrlScheme": "com.googleusercontent.apps.123626004945-t1kkl703f3ivj1dn0rfkpstnb1ion1a4"
         }
       ],
       "expo-apple-authentication"

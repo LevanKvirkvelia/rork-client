@@ -75,7 +75,7 @@ export function HomeScreen() {
         />
         <Pill
           title="Shared"
-          icon="Upload"
+          icon="Share"
           active={activePill === 'Shared'}
           onPress={() => setActivePill('Shared')}
         />

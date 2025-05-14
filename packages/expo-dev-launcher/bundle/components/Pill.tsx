@@ -23,7 +23,11 @@ export const Pill: React.FC<PillProps> = ({ title, icon, active, onPress }) => {
     >
       <View style={styles.iconContainer}>
         {LucideIcon && (
-          <LucideIcon size={16} color={active ? '#FFFFFF' : '#383838'} />
+          <LucideIcon
+            size={18}
+            color={active ? '#FFFFFF' : '#383838'}
+            strokeWidth={1.5}
+          />
         )}
       </View>
       <Text
@@ -42,12 +46,12 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 4,
-    paddingHorizontal: 10,
-    borderRadius: 8,
+    paddingVertical: 5,
+    paddingHorizontal: 12,
+    borderRadius: 12,
   },
   activeContainer: {
-    backgroundColor: '#4B5563',
+    backgroundColor: '#383838',
   },
   inactiveContainer: {
     backgroundColor: '#EFEFF0',
@@ -56,8 +60,8 @@ const styles = StyleSheet.create({
     marginRight: 4,
   },
   title: {
-    fontSize: 15,
-    fontWeight: '500',
+    fontSize: 18,
+    fontWeight: '400',
   },
   activeTitle: {
     color: '#FFFFFF',
