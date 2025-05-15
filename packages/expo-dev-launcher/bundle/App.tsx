@@ -5,11 +5,12 @@ import {
 } from '@react-navigation/stack';
 import * as React from 'react';
 import { LogBox, View } from 'react-native';
-import { AppProviders } from './providers/AppProviders';
 import { HomeScreen } from './screens/HomeScreen';
 import { CircleUserRound, House } from 'lucide-react-native';
 import { LoginScreen } from './screens/LoginScreen';
 import { ProfileScreen } from './screens/ProfileScreen';
+import { AuthProvider, useAuth } from './providers/AuthProvider';
+import { NavigationContainer } from '@react-navigation/native';
 
 LogBox.ignoreLogs(['_NativeDevLoadingView.default.']);
 
@@ -29,34 +30,51 @@ const Stack = createStackNavigator<StackNavigatorParamList, 'main'>();
 export function App() {
   return (
     <View style={{ flex: 1 }}>
-      <AppProviders>
-        <Stack.Navigator
-          id="main"
-          initialRouteName="Main"
-          screenOptions={{
-            presentation: 'modal',
-            gestureEnabled: false,
-          }}
-          detachInactiveScreens={false}
-        >
-          <Stack.Screen
-            name="Main"
-            component={Main}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Login"
-            component={LoginScreen}
-            options={{
-              headerShown: false,
-              cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
-            }}
-          />
-        </Stack.Navigator>
-      </AppProviders>
+      <AuthProvider>
+        <NavigationContainer>
+          <RootNavigator />
+        </NavigationContainer>
+      </AuthProvider>
     </View>
   );
 }
+
+const RootNavigator = () => {
+  const { session, isLoading } = useAuth();
+
+  if (isLoading) {
+    return null;
+  }
+
+  return (
+    <Stack.Navigator
+      id="main"
+      initialRouteName={session ? 'Main' : 'Login'}
+      screenOptions={{
+        presentation: 'modal',
+        gestureEnabled: false,
+      }}
+      detachInactiveScreens={false}
+    >
+      {session ? (
+        <Stack.Screen
+          name="Main"
+          component={Main}
+          options={{ headerShown: false }}
+        />
+      ) : (
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{
+            headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+          }}
+        />
+      )}
+    </Stack.Navigator>
+  );
+};
 
 const Main = () => {
   return (

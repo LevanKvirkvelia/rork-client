@@ -7,8 +7,8 @@ import { StackNavigatorParamList } from '../App';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 GoogleSignin.configure({
-  // scopes: ['https://www.googleapis.com/auth/drive.readonly'],
-  webClientId: 'YOUR_WEB_CLIENT_ID',
+  webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
+  iosClientId: process.env.EXPO_PUBLIC_IOS_CLIENT_ID,
 });
 
 export const signInWithGoogle = async (
@@ -26,7 +26,7 @@ export const signInWithGoogle = async (
       if (error) {
         Alert.alert('Error', error.message);
       } else {
-        navigation.navigate('Main');
+        navigation.navigate('Main', undefined, { pop: true });
       }
     } else {
       throw new Error('No ID token present!');

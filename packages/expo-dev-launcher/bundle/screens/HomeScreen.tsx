@@ -12,6 +12,7 @@ import {
   ProjectListItemProps,
 } from '../components/ProjectListItem';
 import { Pill } from '../components/Pill';
+import { useAuth } from '../providers/AuthProvider';
 
 const projects: ProjectListItemProps[] = [
   { title: 'Calory Tracker', running: false, url: 'exp://127.0.0.1:8081' },
@@ -21,7 +22,7 @@ const projects: ProjectListItemProps[] = [
 export function HomeScreen() {
   const navigation =
     useNavigation<StackNavigationProp<StackNavigatorParamList, 'Main'>>();
-
+  const { session } = useAuth();
   const [activePill, setActivePill] = React.useState('Created');
 
   React.useLayoutEffect(() => {
@@ -87,12 +88,14 @@ export function HomeScreen() {
         style={styles.projectList}
         ListEmptyComponent={<HomePlaceHolder />}
       />
-      <View style={styles.buttonContainer}>
-        <Button
-          title="Sign in to view your projects"
-          onPress={onSignInPressed}
-        />
-      </View>
+      {!session && !session?.user ? (
+        <View style={styles.buttonContainer}>
+          <Button
+            title="Sign in to view your projects"
+            onPress={onSignInPressed}
+          />
+        </View>
+      ) : null}
     </View>
   );
 }

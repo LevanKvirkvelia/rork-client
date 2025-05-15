@@ -47,14 +47,14 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 8,
-    backgroundColor: '#F0F0F0',
+    backgroundColor: '#EFEFF0',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 16,
+    marginRight: 12,
   },
   iconLetter: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 20,
+    fontWeight: '500',
     color: '#4D4D4D',
   },
   textContainer: {
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: '500',
     color: '#4D4D4D',
     marginBottom: 4,
@@ -72,11 +72,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   statusDot: {
-    width: 8,
-    height: 8,
+    width: 4,
+    height: 4,
     borderRadius: 4,
-    backgroundColor: '#4CAF50',
-    marginRight: 6,
+    backgroundColor: '#7EE477',
+    marginRight: 4,
   },
   statusText: {
     fontSize: 14,
