@@ -11,8 +11,11 @@ import { LoginScreen } from './screens/LoginScreen';
 import { ProfileScreen } from './screens/ProfileScreen';
 import { AuthProvider, useAuth } from './providers/AuthProvider';
 import { NavigationContainer } from '@react-navigation/native';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 LogBox.ignoreLogs(['_NativeDevLoadingView.default.']);
+
+const queryClient = new QueryClient();
 
 type TabNavigatorParamList = {
   Home: undefined;
@@ -31,9 +34,11 @@ export function App() {
   return (
     <View style={{ flex: 1 }}>
       <AuthProvider>
-        <NavigationContainer>
-          <RootNavigator />
-        </NavigationContainer>
+        <QueryClientProvider client={queryClient}>
+          <NavigationContainer>
+            <RootNavigator />
+          </NavigationContainer>
+        </QueryClientProvider>
       </AuthProvider>
     </View>
   );
@@ -49,29 +54,26 @@ const RootNavigator = () => {
   return (
     <Stack.Navigator
       id="main"
-      initialRouteName={session ? 'Main' : 'Login'}
+      initialRouteName="Main"
       screenOptions={{
         presentation: 'modal',
         gestureEnabled: false,
       }}
       detachInactiveScreens={false}
     >
-      {session ? (
-        <Stack.Screen
-          name="Main"
-          component={Main}
-          options={{ headerShown: false }}
-        />
-      ) : (
-        <Stack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{
-            headerShown: false,
-            cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
-          }}
-        />
-      )}
+      <Stack.Screen
+        name="Main"
+        component={Main}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{
+          headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+        }}
+      />
     </Stack.Navigator>
   );
 };

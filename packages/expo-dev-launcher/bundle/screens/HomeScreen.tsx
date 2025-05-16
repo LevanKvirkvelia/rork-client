@@ -3,29 +3,38 @@ import * as React from 'react';
 import { Header } from '../components/Header';
 import { HomePlaceHolder } from '../components/HomePlaceHolder';
 import { Button } from '../components/Button';
-import { View, StyleSheet, Alert, FlatList } from 'react-native';
+import { View, StyleSheet, FlatList } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { StackNavigatorParamList } from '../App';
-import { loadApp } from '../native-modules/DevLauncherInternal';
 import {
   ProjectListItem,
   ProjectListItemProps,
 } from '../components/ProjectListItem';
 import { Pill } from '../components/Pill';
 import { useAuth } from '../providers/AuthProvider';
-
-const projects: ProjectListItemProps[] = [
-  { title: 'Calory Tracker', running: false, url: 'exp://127.0.0.1:8081' },
-  { title: 'Music Player', running: true, url: 'exp://127.0.0.1:8081' },
-];
+import { useQuery } from 'react-query';
+import { fetchProjectsAPI } from '../utils/api';
+import { handleOpenApp } from '../utils/app';
+import { useCallback, useLayoutEffect, useState } from 'react';
 
 export function HomeScreen() {
   const navigation =
     useNavigation<StackNavigationProp<StackNavigatorParamList, 'Main'>>();
   const { session } = useAuth();
-  const [activePill, setActivePill] = React.useState('Created');
+  const [activePill, setActivePill] = useState('Created');
 
-  React.useLayoutEffect(() => {
+  const { data: projects } = useQuery<ProjectListItemProps[], Error>(
+    ['projects', session?.user?.id],
+    async () => fetchProjectsAPI(session.access_token),
+    {
+      enabled: !!session?.access_token,
+      onError: (error) => {
+        console.error('Failed to fetch projects:', error);
+      },
+    }
+  );
+
+  useLayoutEffect(() => {
     navigation.setOptions({
       header: () => <Header enableSearch={true} title="My Projects" />,
       headerShown: true,
@@ -36,27 +45,14 @@ export function HomeScreen() {
     navigation.navigate('Login');
   };
 
-  const handleOpenApp = async (url: string) => {
-    if (url) {
-      try {
-        await loadApp(url);
-      } catch (error) {
-        console.error('Failed to open app:', error);
-        Alert.alert(
-          'Error',
-          'Failed to open app. Check the console for more details.'
-        );
-      }
-    }
-  };
-
-  const renderProjectItem = ({ item }: { item: ProjectListItemProps }) => (
-    <ProjectListItem
-      title={item.title}
-      running={item.running}
-      url={item.url}
-      onPress={() => handleOpenApp(item.url)}
-    />
+  const renderProjectItem = useCallback(
+    ({ item }: { item: ProjectListItemProps }) => (
+      <ProjectListItem
+        {...item}
+        onPress={() => handleOpenApp(item.productionUrl)}
+      />
+    ),
+    [handleOpenApp]
   );
 
   return (
@@ -81,13 +77,16 @@ export function HomeScreen() {
           onPress={() => setActivePill('Shared')}
         />
       </View>
-      <FlatList
-        data={projects}
-        renderItem={renderProjectItem}
-        keyExtractor={(item) => item.url + item.title}
-        style={styles.projectList}
-        ListEmptyComponent={<HomePlaceHolder />}
-      />
+      {projects && projects.length > 0 ? (
+        <FlatList
+          data={projects || []}
+          renderItem={renderProjectItem}
+          keyExtractor={(item) => item.id}
+          style={styles.projectList}
+        />
+      ) : (
+        <HomePlaceHolder />
+      )}
       {!session && !session?.user ? (
         <View style={styles.buttonContainer}>
           <Button

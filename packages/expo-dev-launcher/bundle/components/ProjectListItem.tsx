@@ -4,16 +4,20 @@ import { ChevronRight } from 'lucide-react-native';
 import { useMemo } from 'react';
 
 export type ProjectListItemProps = {
-  title: string;
-  running?: boolean;
+  id: string;
+  title: string | null;
+  slug: string;
+  createdAt: string;
+  editedAt: string;
+  currentSnapshotId: string;
+  productionUrl?: string;
   onPress?: () => void;
-  url: string;
 };
 
 export function ProjectListItem(props: ProjectListItemProps) {
-  const { title, running, onPress, url } = props;
+  const { title, onPress, productionUrl } = props;
   const iconLetterToDisplay = useMemo(
-    () => title.charAt(0).toUpperCase(),
+    () => (title ? title.charAt(0).toUpperCase() : 'P'),
     [title]
   );
 
@@ -23,13 +27,13 @@ export function ProjectListItem(props: ProjectListItemProps) {
         <Text style={styles.iconLetter}>{iconLetterToDisplay}</Text>
       </View>
       <View style={styles.textContainer}>
-        <Text style={styles.title}>{title}</Text>
-        {running && (
+        <Text style={styles.title}>{title || 'Untitled Project'}</Text>
+        {/* {running && (
           <View style={styles.statusContainer}>
             <View style={styles.statusDot} />
             <Text style={styles.statusText}>Running</Text>
           </View>
-        )}
+        )} */}
       </View>
       <ChevronRight size={20} color="#838383" style={styles.chevron} />
     </TouchableOpacity>
