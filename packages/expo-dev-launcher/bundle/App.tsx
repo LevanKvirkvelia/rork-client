@@ -12,7 +12,6 @@ import { ProfileScreen } from './screens/ProfileScreen';
 import { AuthProvider, useAuth } from './providers/AuthProvider';
 import { NavigationContainer, LinkingOptions } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { useDeepLink } from './hooks/useDeepLink';
 import { handleOpenApp } from './utils/app';
 import * as Linking from 'expo-linking';
 
