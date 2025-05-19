@@ -8,9 +8,15 @@
     ```bash
     yarn install
     ```
-3. **Build the dev launcher**
+3. **Install dev launcher dependencies**
     ```bash
-    yarn build:dev-launcher
+    cd packages/expo-dev-launcher
+    yarn install
+    cd ../..
+    ```
+4. **Run npx expo prebuild**
+    ```bash
+    npx expo prebuild
     ```
 
 ## Development Workflow
@@ -25,7 +31,13 @@ If you make changes within the `packages/expo-dev-launcher` directory, you need 
     yarn build:dev-launcher
     ```
 
-2.  **Rebuild the application:**
+2.  **Install the dev launcher**
+    Go into root directory and run:
+    ```bash
+    yarn install
+    ```
+
+3.  **Rebuild the application:**
     After rebuilding the dev launcher package, you need to rebuild the native application for your target platform (iOS/Android). This process will incorporate the changes into the development client installed on your simulator or device.
 
 ### Building for iOS Simulator (Local Development)
@@ -34,9 +46,8 @@ To build the application specifically for the iOS simulator:
 
 1.  **Run the build command:**
     ```bash
-    yarn build:ios-local
+    yarn ios
     ```
-    This command will build the app and automatically install it onto your running iOS simulator.
 
 ## How to debug
 
@@ -54,6 +65,7 @@ To build the application specifically for the iOS simulator:
     cd ios/
     export EX_DEV_LAUNCHER_URL=http://localhost:8090
     pod install
+    cd ..
     ``` 
 
     Then we can open the `rorkclient.xcworkspace` and run it to debug js and native code now.
