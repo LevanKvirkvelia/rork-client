@@ -1,105 +1,119 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
 import {
-  ExtensionsFilledIcon,
-  HomeFilledIcon,
-  InfoIcon,
-  SettingsFilledIcon,
-} from 'expo-dev-client-components';
+  CardStyleInterpolators,
+  createStackNavigator,
+} from '@react-navigation/stack';
 import * as React from 'react';
-import { View } from 'react-native';
-
-import { LoadInitialData } from './components/LoadInitialData';
-import { Splash } from './components/Splash';
-import { AppProviders } from './providers/AppProviders';
-import { CrashReportScreen } from './screens/CrashReportScreen';
-import { ExtensionsStack } from './screens/ExtensionsStack';
+import { LogBox, View } from 'react-native';
 import { HomeScreen } from './screens/HomeScreen';
-import { KitchenSinkScreen } from './screens/KitchenSinkScreen';
-import { SettingsScreen } from './screens/SettingsScreen';
-import { UserProfileScreen } from './screens/UserProfileScreen';
+import { CircleUserRound, House } from 'lucide-react-native';
+import { LoginScreen } from './screens/LoginScreen';
+import { ProfileScreen } from './screens/ProfileScreen';
+import { AuthProvider, useAuth } from './providers/AuthProvider';
+import { NavigationContainer } from '@react-navigation/native';
+import { QueryClient, QueryClientProvider } from 'react-query';
+
+LogBox.ignoreLogs(['_NativeDevLoadingView.default.']);
+
+const queryClient = new QueryClient();
 
 type TabNavigatorParamList = {
   Home: undefined;
-  ExtensionsStack: undefined;
-  Settings: undefined;
-  'Kitchen Sink': undefined;
+  Profile: undefined;
 };
 const Tab = createBottomTabNavigator<TabNavigatorParamList, 'tab'>();
 
-type StackNavigatorParamList = {
+export type StackNavigatorParamList = {
   Main: undefined;
-  'User Profile': undefined;
-  'Crash Report': undefined;
+  Profile: undefined;
+  Login: undefined;
 };
 const Stack = createStackNavigator<StackNavigatorParamList, 'main'>();
 
-type LauncherAppProps = object;
-
-export function App(props: LauncherAppProps) {
+export function App() {
   return (
-    <View style={{ direction: 'ltr', flex: 1 }}>
-      <LoadInitialData loader={<Splash />}>
-        <AppProviders>
-          <Stack.Navigator
-            id="main"
-            initialRouteName="Main"
-            screenOptions={{ presentation: 'modal', gestureEnabled: false }}
-            detachInactiveScreens={false}>
-            <Stack.Screen name="Main" component={Main} options={{ headerShown: false }} />
-
-            <Stack.Screen
-              name="User Profile"
-              component={UserProfileScreen}
-              options={{ headerShown: false }}
-            />
-
-            <Stack.Screen name="Crash Report" component={CrashReportScreen} />
-          </Stack.Navigator>
-        </AppProviders>
-      </LoadInitialData>
+    <View style={{ flex: 1 }}>
+      <AuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <NavigationContainer>
+            <RootNavigator />
+          </NavigationContainer>
+        </QueryClientProvider>
+      </AuthProvider>
     </View>
   );
 }
 
+const RootNavigator = () => {
+  const { session, isLoading } = useAuth();
+
+  if (isLoading) {
+    return null;
+  }
+
+  return (
+    <Stack.Navigator
+      id="main"
+      initialRouteName="Main"
+      screenOptions={{
+        presentation: 'modal',
+        gestureEnabled: false,
+      }}
+      detachInactiveScreens={false}
+    >
+      <Stack.Screen
+        name="Main"
+        component={Main}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{
+          headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+
 const Main = () => {
   return (
-    <Tab.Navigator detachInactiveScreens={false} id="tab">
+    <Tab.Navigator
+      detachInactiveScreens={false}
+      id="tab"
+      screenOptions={{
+        tabBarStyle: {
+          backgroundColor: 'white',
+          borderTopWidth: 0,
+          shadowOpacity: 0,
+        },
+        sceneStyle: { backgroundColor: 'white' },
+      }}
+    >
       <Tab.Screen
         name="Home"
         component={HomeScreen}
         options={{
           headerShown: false,
-          tabBarIcon: ({ focused }) => <HomeFilledIcon focused={focused} />,
+          tabBarShowLabel: false,
+          tabBarIcon: ({ focused }) => (
+            <House size={24} color={focused ? 'black' : 'gray'} />
+          ),
         }}
       />
       <Tab.Screen
-        name="ExtensionsStack"
-        component={ExtensionsStack}
+        name="Profile"
+        component={ProfileScreen}
         options={{
           headerShown: false,
-          tabBarIcon: ({ focused }) => <ExtensionsFilledIcon focused={focused} />,
-          title: 'Extensions',
+          tabBarShowLabel: false,
+          tabBarIcon: ({ focused }) => (
+            <CircleUserRound size={24} color={focused ? 'black' : 'gray'} />
+          ),
         }}
       />
-      <Tab.Screen
-        name="Settings"
-        component={SettingsScreen}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ focused }) => <SettingsFilledIcon focused={focused} />,
-        }}
-      />
-      {__DEV__ && (
-        <Tab.Screen
-          name="Kitchen Sink"
-          component={KitchenSinkScreen}
-          options={{
-            headerShown: false,
-            tabBarIcon: () => <InfoIcon />,
-          }}
-        />
-      )}
     </Tab.Navigator>
   );
 };

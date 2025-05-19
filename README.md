@@ -37,3 +37,26 @@ To build the application specifically for the iOS simulator:
     yarn build:ios-local
     ```
     This command will build the app and automatically install it onto your running iOS simulator.
+
+## How to debug
+
+1.  **Start Metro of rork**
+
+    Attention: We should at the root directory of `rork-client`, not `rork-client/packages/expo-dev-launcher`. And then start metro using 8090 port.
+    ```
+    npx expo start --port 8090
+    ```
+    
+2.  **Run the client**
+
+    Go to ios directory and pod install:
+    ```
+    cd ios/
+    export EX_DEV_LAUNCHER_URL=http://localhost:8090
+    pod install
+    ``` 
+
+    Then we can open the `rorkclient.xcworkspace` and run it to debug js and native code now.
+    
+    If we need to chang native code, we need `rm -rf node_modules` and `yarn install` again currently. 
+    

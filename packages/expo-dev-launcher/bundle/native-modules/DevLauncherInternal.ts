@@ -1,14 +1,7 @@
 import { requireNativeModule } from 'expo-modules-core';
 
-import { RecentApp } from '../providers/RecentlyOpenedAppsProvider';
-
 const DevLauncher = requireNativeModule('ExpoDevLauncherInternal');
 const ON_NEW_DEEP_LINK_EVENT = 'expo.modules.devlauncher.onnewdeeplink';
-
-export async function getRecentlyOpenedApps(): Promise<RecentApp[]> {
-  const recentlyOpenedApps = await DevLauncher.getRecentlyOpenedApps();
-  return recentlyOpenedApps;
-}
 
 export async function clearRecentlyOpenedApps(): Promise<void> {
   return await DevLauncher.clearRecentlyOpenedApps();
@@ -61,7 +54,9 @@ export async function getCrashReport(): Promise<CrashReport | null> {
   return await DevLauncher.getCrashReport();
 }
 
-export function addDeepLinkListener(callback: (event: { url: string }) => void) {
+export function addDeepLinkListener(
+  callback: (event: { url: string }) => void
+) {
   return DevLauncher.addListener(ON_NEW_DEEP_LINK_EVENT, callback);
 }
 

@@ -12,6 +12,8 @@ if (EXPO_BUNDLE_APP) {
   config.transformer.enableBabelRCLookup = false;
 }
 
+config.resolver.unstable_enablePackageExports = false;
+
 config.resolver.blockList = [
   // Copied from expo-yarn-workspaces
   /\/__tests__\//,
