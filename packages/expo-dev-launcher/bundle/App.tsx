@@ -10,8 +10,11 @@ import { CircleUserRound, House } from 'lucide-react-native';
 import { LoginScreen } from './screens/LoginScreen';
 import { ProfileScreen } from './screens/ProfileScreen';
 import { AuthProvider, useAuth } from './providers/AuthProvider';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, LinkingOptions } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { useDeepLink } from './hooks/useDeepLink';
+import { handleOpenApp } from './utils/app';
+import * as Linking from 'expo-linking';
 
 LogBox.ignoreLogs(['_NativeDevLoadingView.default.']);
 
@@ -46,6 +49,12 @@ export function App() {
 
 const RootNavigator = () => {
   const { session, isLoading } = useAuth();
+  const url = Linking.useURL();
+
+  if (url) {
+    console.log('url', url);
+    handleOpenApp('https://' + url.replace('rork://', ''));
+  }
 
   if (isLoading) {
     return null;
