@@ -14,6 +14,8 @@ import { NavigationContainer, LinkingOptions } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { handleOpenApp } from './utils/app';
 import * as Linking from 'expo-linking';
+import { useDeepLink } from './hooks/useDeepLink';
+import { useEffect } from 'react';
 
 const queryClient = new QueryClient();
 
@@ -46,12 +48,15 @@ export function App() {
 
 const RootNavigator = () => {
   const { session, isLoading } = useAuth();
-  const url = Linking.useURL();
+  const { url, clear } = useDeepLink();
 
-  if (url) {
-    console.log('url', url);
-    handleOpenApp('https://' + url.replace('rork://', ''));
-  }
+  useEffect(() => {
+    if (url) {
+      console.log('url', url);
+      handleOpenApp(`https://${url}`);
+      clear();
+    }
+  }, [url, clear]);
 
   if (isLoading) {
     return null;
