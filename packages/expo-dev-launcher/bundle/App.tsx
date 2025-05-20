@@ -15,8 +15,6 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { handleOpenApp } from './utils/app';
 import * as Linking from 'expo-linking';
 
-LogBox.ignoreLogs(['_NativeDevLoadingView.default.']);
-
 const queryClient = new QueryClient();
 
 type TabNavigatorParamList = {
