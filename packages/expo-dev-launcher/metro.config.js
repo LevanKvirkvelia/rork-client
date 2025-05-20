@@ -24,13 +24,13 @@ config.resolver.blockList = [
 ];
 
 config.resolver.resolveRequest = (context, moduleName, platform) => {
-  if (platform === 'ios' && /Components\/StatusBar\/StatusBar/.test(moduleName)) {
-    console.log(`Replacing ${moduleName} with NOOP`);
-    return {
-      type: 'sourceFile',
-      filePath: path.join(__dirname, 'bundle', 'StatusBarMock.js'),
-    };
-  }
+  // if (platform === 'ios' && /Components\/StatusBar\/StatusBar/.test(moduleName)) {
+  //   console.log(`Replacing ${moduleName} with NOOP`);
+  //   return {
+  //     type: 'sourceFile',
+  //     filePath: path.join(__dirname, 'bundle', 'StatusBarMock.js'),
+  //   };
+  // }
   return context.resolveRequest(context, moduleName, platform);
 };
 
