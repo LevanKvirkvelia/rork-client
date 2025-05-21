@@ -32,9 +32,6 @@ export function HomeScreen() {
     queryKey: ['projects', session?.user?.id],
     queryFn: async () => fetchProjectsAPI(session.access_token),
     enabled: !!session?.access_token,
-    onError: (error) => {
-      console.error('Failed to fetch projects:', error);
-    },
   });
 
   const filteredProjects = useMemo(
