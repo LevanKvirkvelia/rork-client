@@ -14,6 +14,17 @@ if (EXPO_BUNDLE_APP) {
 
 config.resolver.unstable_enablePackageExports = false;
 
+const nodeModulesPaths = [
+  path.resolve(__dirname, '../../node_modules'),
+];
+
+config.resolver.nodeModulesPaths = nodeModulesPaths;
+
+config.watchFolders = [
+  ...(config.watchFolders || []),
+  ...nodeModulesPaths,
+];
+
 config.resolver.blockList = [
   // Copied from expo-yarn-workspaces
   /\/__tests__\//,
