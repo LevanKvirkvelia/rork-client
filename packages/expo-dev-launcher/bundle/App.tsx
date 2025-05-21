@@ -11,13 +11,26 @@ import { LoginScreen } from './screens/LoginScreen';
 import { ProfileScreen } from './screens/ProfileScreen';
 import { AuthProvider, useAuth } from './providers/AuthProvider';
 import { NavigationContainer } from '@react-navigation/native';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { handleOpenApp } from './utils/app';
 import { useDeepLink } from './hooks/useDeepLink';
 import { useEffect } from 'react';
 import { useRecentlyOpened } from './hooks/useRecentlyOpened';
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
+import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      gcTime: 1000 * 60 * 60 * 24,
+    },
+  },
+});
+
+const asyncStoragePersister = createAsyncStoragePersister({
+  storage: AsyncStorage,
+});
 
 type TabNavigatorParamList = {
   Home: undefined;
@@ -36,11 +49,14 @@ export function App() {
   return (
     <View style={{ flex: 1 }}>
       <AuthProvider>
-        <QueryClientProvider client={queryClient}>
+        <PersistQueryClientProvider
+          client={queryClient}
+          persistOptions={{ persister: asyncStoragePersister }}
+        >
           <NavigationContainer>
             <RootNavigator />
           </NavigationContainer>
-        </QueryClientProvider>
+        </PersistQueryClientProvider>
       </AuthProvider>
     </View>
   );

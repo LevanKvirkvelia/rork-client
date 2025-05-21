@@ -12,7 +12,7 @@ import {
 } from '../components/ProjectListItem';
 import { Pill } from '../components/Pill';
 import { useAuth } from '../providers/AuthProvider';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { fetchProjectsAPI } from '../utils/api';
 import { handleOpenApp } from '../utils/app';
 import { useCallback, useLayoutEffect, useState, useMemo } from 'react';
@@ -20,21 +20,22 @@ import { useRecentlyOpened } from '../hooks/useRecentlyOpened';
 
 export function HomeScreen() {
   const navigation =
-    useNavigation<StackNavigationProp<StackNavigatorParamList, 'Main'>>();
+    useNavigation<StackNavigationProp<StackNavigatorParamList>>();
   const { session } = useAuth();
   const [activePill, setActivePill] = useState('Created');
   const { recentlyOpened } = useRecentlyOpened();
 
-  const { data: projects } = useQuery<ProjectListItemProps[], Error>(
-    ['projects', session?.user?.id],
-    async () => fetchProjectsAPI(session.access_token),
-    {
-      enabled: !!session?.access_token,
-      onError: (error) => {
-        console.error('Failed to fetch projects:', error);
-      },
-    }
-  );
+  const { data: projects, isLoading: loadingProjects } = useQuery<
+    ProjectListItemProps[],
+    Error
+  >({
+    queryKey: ['projects', session?.user?.id],
+    queryFn: async () => fetchProjectsAPI(session.access_token),
+    enabled: !!session?.access_token,
+    onError: (error) => {
+      console.error('Failed to fetch projects:', error);
+    },
+  });
 
   const filteredProjects = useMemo(
     () => projects?.filter((project) => project.productionUrl) || [],
@@ -117,7 +118,7 @@ export function HomeScreen() {
         <HomePlaceHolder />
       )}
 
-      {recentlyOpened && recentlyOpened.length > 0 && (
+      {recentlyOpened?.length && !loadingProjects && (
         <View>
           <Text style={styles.sectionTitle}>Recently Opened</Text>
           <FlatList
