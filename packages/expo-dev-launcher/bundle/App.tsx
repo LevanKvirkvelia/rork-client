@@ -4,18 +4,18 @@ import {
   createStackNavigator,
 } from '@react-navigation/stack';
 import * as React from 'react';
-import { LogBox, View } from 'react-native';
+import { View } from 'react-native';
 import { HomeScreen } from './screens/HomeScreen';
 import { CircleUserRound, House } from 'lucide-react-native';
 import { LoginScreen } from './screens/LoginScreen';
 import { ProfileScreen } from './screens/ProfileScreen';
 import { AuthProvider, useAuth } from './providers/AuthProvider';
-import { NavigationContainer, LinkingOptions } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { handleOpenApp } from './utils/app';
-import * as Linking from 'expo-linking';
 import { useDeepLink } from './hooks/useDeepLink';
 import { useEffect } from 'react';
+import { useRecentlyOpened } from './hooks/useRecentlyOpened';
 
 const queryClient = new QueryClient();
 
@@ -49,14 +49,17 @@ export function App() {
 const RootNavigator = () => {
   const { session, isLoading } = useAuth();
   const { url, clear } = useDeepLink();
+  const { addRecentlyOpened } = useRecentlyOpened();
 
   useEffect(() => {
     if (url) {
       console.log('url', url);
-      handleOpenApp(`https://${url}`);
+      const fullUrl = `https://${url}`;
+      handleOpenApp(fullUrl);
+      addRecentlyOpened(fullUrl);
       clear();
     }
-  }, [url, clear]);
+  }, [url, clear, addRecentlyOpened]);
 
   if (isLoading) {
     return null;

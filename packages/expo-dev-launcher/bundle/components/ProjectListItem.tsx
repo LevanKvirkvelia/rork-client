@@ -27,7 +27,9 @@ export function ProjectListItem(props: ProjectListItemProps) {
         <Text style={styles.iconLetter}>{iconLetterToDisplay}</Text>
       </View>
       <View style={styles.textContainer}>
-        <Text style={styles.title}>{title || 'Untitled Project'}</Text>
+        <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
+          {title || 'Untitled Project'}
+        </Text>
         {/* {running && (
           <View style={styles.statusContainer}>
             <View style={styles.statusDot} />
@@ -70,6 +72,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#4D4D4D',
     marginBottom: 4,
+    marginRight: 16,
   },
   statusContainer: {
     flexDirection: 'row',
